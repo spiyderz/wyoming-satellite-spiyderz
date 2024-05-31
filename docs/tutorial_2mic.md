@@ -271,6 +271,7 @@ ExecStart=/home/pi/wyoming-satellite/script/run ... --wake-uri 'tcp://127.0.0.1:
 Reload and restart the satellite service:
 
 ``` sh
+sudo systemctl enable --now wyoming-openwakeword.service
 sudo systemctl daemon-reload
 sudo systemctl restart wyoming-satellite.service
 ```
