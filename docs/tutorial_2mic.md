@@ -27,7 +27,7 @@ sudo apt-get install --no-install-recommends  \
   python3-venv
 ```
 
-Clone the `wyoming-satellite` repository:
+Clone the `wyoming-satellite-spiyderz` repository:
 
 ```sh
 git clone https://github.com/spiyderz/wyoming-satellite-spiyderz.git
@@ -127,7 +127,7 @@ In the `wyoming-satellite-spiyderz` directory, run:
 ```sh
 script/run \
   --debug \
-  --name 'my satellite1' \
+  --name 'my satellite "name here"' \
   --uri 'tcp://0.0.0.0:10700' \
   --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' \
   --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw'
@@ -142,7 +142,7 @@ Your satellite should say "Streaming audio", and you can use the wake word of yo
 
 ## Create Services
 
-You can run wyoming-satellite as a systemd service by first creating a service file:
+You can run wyoming-satellite-spiyderz as a systemd service by first creating a service file:
 
 ``` sh
 sudo systemctl edit --force --full wyoming-satellite-spiyderz.service
@@ -159,7 +159,7 @@ Requires=wyoming-openwakeword-spiyderz
 
 [Service]
 Type=simple
-ExecStart=/home/pi/wyoming-satellite-spiyderz/script/run --name 'my satellite' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw' 
+ExecStart=/home/pi/wyoming-satellite-spiyderz/script/run --name 'my satellite "name here"' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw' --snd-volume-multiplier 1.0 --mic-auto-gain 5 --mic-noise-suppression 1 --done-wav sounds/done.wav --awake-wav sounds/awake.wav
 WorkingDirectory=/home/pi/wyoming-satellite-spiyderz
 Restart=always
 RestartSec=1
@@ -201,10 +201,8 @@ sudo apt-get install --no-install-recommends  \
 From your home directory, install the openWakeWord Wyoming service:
 
 ```sh
-git clone https://github.com/spiyderz/wyoming-openwakeword.git
+git clone https://github.com/spiyderz/wyoming-openwakeword-spiyderz.git
 cd wyoming-openwakeword-spiyderz
-nano requirements.txt
-* remove -"nightly" from line one
 script/setup
 ```
 
@@ -222,7 +220,7 @@ Description=Wyoming openWakeWord Spiyderz
 
 [Service]
 Type=simple
-ExecStart=/home/pi/wyoming-openwakeword-spiyderz/script/run --uri 'tcp://127.0.0.1:10400'
+ExecStart=/home/pi/wyoming-openwakeword-spiyderz/script/run --uri 'tcp://127.0.0.1:10400'  -threshold 0.90
 WorkingDirectory=/home/pi/wyoming-openwakeword-spiyderz
 Restart=always
 RestartSec=1
@@ -248,14 +246,14 @@ Requires=wyoming-openwakeword-spiyderz.service
 
 [Service]
 ...
-ExecStart=/home/pi/wyoming-satellite-spiyderz/script/run ... --wake-uri 'tcp://127.0.0.1:10400' --wake-word-name 'ok_nabu'
+ExecStart=/home/pi/wyoming-satellite-spiyderz/script/run ... --wake-uri 'tcp://127.0.0.1:10400' --wake-word-name 'hey_jarvis'
 ...
 
 [Install]
 ...
 ```
 
-Reload and restart the satellite service:
+Enable openwakeword service, reload and restart the satellite service:
 
 ``` sh
 sudo systemctl enable --now wyoming-openwakeword-spiyderz.service
