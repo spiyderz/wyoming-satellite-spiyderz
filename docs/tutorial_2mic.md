@@ -30,13 +30,13 @@ sudo apt-get install --no-install-recommends  \
 Clone the `wyoming-satellite` repository:
 
 ```sh
-git clone https://github.com/rhasspy/wyoming-satellite.git
+git clone https://github.com/spiyderz/wyoming-satellite-spiyderz.git
 ```
 
 If you have the ReSpeaker 2Mic or 4Mic HAT, recompile and install the drivers (this will take really long time):
 
 ```sh
-cd wyoming-satellite/
+cd wyoming-satellite-spiyderz/
 sudo bash etc/install-respeaker-drivers.sh
 ```
 
@@ -49,7 +49,7 @@ sudo reboot
 Once the satellite has rebooted, reconnect over SSH and continue the installation:
 
 ```sh
-cd wyoming-satellite/
+cd wyoming-satellite-spiyderz/
 python3 -m venv .venv
 .venv/bin/pip3 install --upgrade pip
 .venv/bin/pip3 install --upgrade wheel setuptools
@@ -122,12 +122,12 @@ Make note of your microphone and speaker devices for the next step.
 
 ## Running the Satellite
 
-In the `wyoming-satellite` directory, run:
+In the `wyoming-satellite-spiyderz` directory, run:
 
 ```sh
 script/run \
   --debug \
-  --name 'my satellite' \
+  --name 'my satellite1' \
   --uri 'tcp://0.0.0.0:10700' \
   --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' \
   --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw'
@@ -145,21 +145,22 @@ Your satellite should say "Streaming audio", and you can use the wake word of yo
 You can run wyoming-satellite as a systemd service by first creating a service file:
 
 ``` sh
-sudo systemctl edit --force --full wyoming-satellite.service
+sudo systemctl edit --force --full wyoming-satellite-spiyderz.service
 ```
 
 Paste in the following template, and change both `/home/pi` and the `script/run` arguments to match your set up:
 
 ```text
 [Unit]
-Description=Wyoming Satellite
+Description=Wyoming Satellite Spiyderz
 Wants=network-online.target
 After=network-online.target
+Requires=wyoming-openwakeword-spiyderz
 
 [Service]
 Type=simple
-ExecStart=/home/pi/wyoming-satellite/script/run --name 'my satellite' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw'
-WorkingDirectory=/home/pi/wyoming-satellite
+ExecStart=/home/pi/wyoming-satellite-spiyderz/script/run --name 'my satellite' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw' 
+WorkingDirectory=/home/pi/wyoming-satellite-spiyderz
 Restart=always
 RestartSec=1
 
@@ -170,7 +171,7 @@ WantedBy=default.target
 Save the file and exit your editor. Next, enable the service to start at boot and run it:
 
 ``` sh
-sudo systemctl enable --now wyoming-satellite.service
+sudo systemctl enable --now wyoming-satellite-spiyderz.service
 ```
 
 (you may need to hit CTRL+C to get back to a shell prompt)
@@ -178,30 +179,14 @@ sudo systemctl enable --now wyoming-satellite.service
 With the service running, you can view logs in real-time with:
 
 ``` sh
-journalctl -u wyoming-satellite.service -f
+journalctl -u wyoming-satellite-spiyderz.service -f
 ```
 
 If needed, disable and stop the service with:
 
 ``` sh
-sudo systemctl disable --now wyoming-satellite.service
+sudo systemctl disable --now wyoming-satellite-spiyderz.service
 ```
-
-## Audio Enhancements
-
-You can run the satellite with automatic gain control and noise suppression:
-
-``` sh
-script/run \
-  ... \
-  --mic-auto-gain 5 \
-  --mic-noise-suppression 2
-```
-
-Automatic gain control is between 0-31 dbFS, which 31 being the loudest.
-Noise suppression is from 0-4, with 4 being maximum suppression (may cause audio distortion).
-
-You can also use `--mic-volume-multiplier X` to multiply all audio samples by `X`. For example, using 2 for `X` will double the microphone volume (but may cause audio distortion). The corresponding `--snd-volume-multiplier` does the same for audio playback.
 
 ## Local Wake Word Detection
 
@@ -216,27 +201,29 @@ sudo apt-get install --no-install-recommends  \
 From your home directory, install the openWakeWord Wyoming service:
 
 ```sh
-git clone https://github.com/rhasspy/wyoming-openwakeword.git
-cd wyoming-openwakeword
+git clone https://github.com/spiyderz/wyoming-openwakeword.git
+cd wyoming-openwakeword-spiyderz
+nano requirements.txt
+* remove -"nightly" from line one
 script/setup
 ```
 
 Create a systemd service for it:
 
 ``` sh
-sudo systemctl edit --force --full wyoming-openwakeword.service
+sudo systemctl edit --force --full wyoming-openwakeword-spiyderz.service
 ```
 
 Paste in the following template, and change both `/home/pi` and the `script/run` arguments to match your set up:
 
 ```text
 [Unit]
-Description=Wyoming openWakeWord
+Description=Wyoming openWakeWord Spiyderz
 
 [Service]
 Type=simple
-ExecStart=/home/pi/wyoming-openwakeword/script/run --uri 'tcp://127.0.0.1:10400'
-WorkingDirectory=/home/pi/wyoming-openwakeword
+ExecStart=/home/pi/wyoming-openwakeword-spiyderz/script/run --uri 'tcp://127.0.0.1:10400'
+WorkingDirectory=/home/pi/wyoming-openwakeword-spiyderz
 Restart=always
 RestartSec=1
 
@@ -249,7 +236,7 @@ Save the file and exit your editor.
 You can now update your satellite service:
 
 ``` sh
-sudo systemctl edit --force --full wyoming-satellite.service
+sudo systemctl edit --force --full wyoming-satellite-spiyderz.service
 ```
 
 Update just the parts below:
@@ -257,11 +244,11 @@ Update just the parts below:
 ```text
 [Unit]
 ...
-Requires=wyoming-openwakeword.service
+Requires=wyoming-openwakeword-spiyderz.service
 
 [Service]
 ...
-ExecStart=/home/pi/wyoming-satellite/script/run ... --wake-uri 'tcp://127.0.0.1:10400' --wake-word-name 'ok_nabu'
+ExecStart=/home/pi/wyoming-satellite-spiyderz/script/run ... --wake-uri 'tcp://127.0.0.1:10400' --wake-word-name 'ok_nabu'
 ...
 
 [Install]
@@ -271,9 +258,9 @@ ExecStart=/home/pi/wyoming-satellite/script/run ... --wake-uri 'tcp://127.0.0.1:
 Reload and restart the satellite service:
 
 ``` sh
-sudo systemctl enable --now wyoming-openwakeword.service
+sudo systemctl enable --now wyoming-openwakeword-spiyderz.service
 sudo systemctl daemon-reload
-sudo systemctl restart wyoming-satellite.service
+sudo systemctl restart wyoming-satellite-spiyderz.service
 ```
 
 You should see the wake service get automatically loaded:
@@ -287,103 +274,8 @@ They should all be "active (running)" and green.
 Test out your satellite by saying "ok, nabu" and a voice command. Use `journalctl` to check the logs of services for errors:
 
 ``` sh
-journalctl -u wyoming-openwakeword.service -f
+journalctl -u wyoming-openwakeword-spiyderz.service -f
 ```
 
 Make sure to run `sudo systemctl daemon-reload` every time you make changes to the service.
 
-## LED Service
-
-Example event services for the ReSpeaker 2Mic and 4Mic HATs are included in `wyoming-satellite/examples` that will change the LED color depending on the satellite state. The example below is for the 2Mic HAT, using `2mic_service.py`.  If you're using the 4Mic HAT, use `4mic_service.py` instead as the LEDs and GPIO pins are slightly different.
-
-Install it from your home directory:
-
-```sh
-cd wyoming-satellite/examples
-python3 -m venv --system-site-packages .venv
-.venv/bin/pip3 install --upgrade pip
-.venv/bin/pip3 install --upgrade wheel setuptools
-.venv/bin/pip3 install 'wyoming==1.5.2'
-```
-
-The `--system-site-packages` argument is used to access the pre-installed `gpiozero` and `spidev` Python packages. If these are **not already installed** in your system, run:
-
-```sh
-sudo apt-get install python3-spidev python3-gpiozero
-```
-
-Test the service with:
-
-```sh
-.venv/bin/python3 2mic_service.py --help
-```
-
-Create a systemd service for it:
-
-``` sh
-sudo systemctl edit --force --full 2mic_leds.service
-```
-
-Paste in the following template, and change both `/home/pi` and the `script/run` arguments to match your set up:
-
-```text
-[Unit]
-Description=2Mic LEDs
-
-[Service]
-Type=simple
-ExecStart=/home/pi/wyoming-satellite/examples/.venv/bin/python3 2mic_service.py --uri 'tcp://127.0.0.1:10500'
-WorkingDirectory=/home/pi/wyoming-satellite/examples
-Restart=always
-RestartSec=1
-
-[Install]
-WantedBy=default.target
-```
-
-Save the file and exit your editor.
-
-You can now update your satellite service:
-
-``` sh
-sudo systemctl edit --force --full wyoming-satellite.service
-```
-
-Update just the parts below:
-
-```text
-[Unit]
-...
-Requires=2mic_leds.service
-
-[Service]
-...
-ExecStart=/home/pi/wyoming-satellite/script/run ... --event-uri 'tcp://127.0.0.1:10500'
-...
-
-[Install]
-...
-```
-
-Reload and restart the satellite service:
-
-``` sh
-sudo systemctl daemon-reload
-sudo systemctl restart wyoming-satellite.service
-```
-
-You should see the service get automatically loaded:
-
-``` sh
-sudo systemctl status wyoming-satellite.service 2mic_leds.service
-```
-
-They should all be "active (running)" and green.
-
-Try a voice command and see if the LEDs change. Use `journalctl` to check the logs of services for errors:
-
-``` sh
-journalctl -u 2mic_leds.service -f
-```
-
-Make sure to run `sudo systemctl daemon-reload` every time you make changes to the service.
