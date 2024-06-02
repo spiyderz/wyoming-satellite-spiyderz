@@ -85,7 +85,7 @@ def install_wake_word(settings: Settings, wake_word_system: WakeWordSystem) -> N
                     [
                         "git",
                         "clone",
-                        "https://github.com/rhasspy/wyoming-openwakeword.git",
+                        "https://github.com/spiyderz/wyoming-openwakeword.git",
                         str(oww_dir),
                     ],
                     [str(oww_dir / "script" / "setup")],
