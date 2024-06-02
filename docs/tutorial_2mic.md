@@ -2,7 +2,7 @@
 
 https://github.com/rhasspy/wyoming-satellite/tree/master
 
-All credit goes to the original developer(s). All I did was fork their repo, clean up the 2_mic tutitorial to make it a bit easier, fixed one line of code in the openwakeword repo to fix the install failing and added the command for openwakeword to start at boot that was missing in the original tutitorial so that the system would survive a reboot or coming back from power loss. I also removed the LED portion of the noriginal tut because I couldnt get it to work. 
+All credit goes to the original developer(s). All I did was fork their repo, clean up the 2_mic tutitorial to make it a bit easier, fixed one line of code in the openwakeword repo to fix the install failing and added the command for openwakeword to start at boot that was missing in the original tutitorial so that the system would survive a reboot or coming back from power loss. I also removed the LED portion of the original tutitorial because I couldnt get it to work. 
 
 ## Hardware links for what I have in my setup...
 
