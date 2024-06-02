@@ -40,7 +40,7 @@ setup(
     name="wyoming_satellite",
     version="1.1.0",
     description="Wyoming server for remote voice satellite",
-    url="http://github.com/rhasspy/wyoming-satellite",
+    url="http://github.com/spiyderz/wyoming-satellite",
     author="Michael Hansen",
     author_email="mike@rhasspy.org",
     packages=setuptools.find_packages(),
