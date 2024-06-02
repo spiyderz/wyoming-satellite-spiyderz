@@ -18,7 +18,7 @@ I can comfirm this works with a Pi4 (and probably a Pi3?) if you have one lying 
 
 Create a voice satellite using a [Raspberry Pi Zero 2 W](https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/) and a [ReSpeaker 2Mic HAT](https://wiki.keyestudio.com/Ks0314_keyestudio_ReSpeaker_2-Mic_Pi_HAT_V1.0).
 
-This tutorial should work for almost any Raspberry Pi and USB microphone. Audio enhancements and local wake word detection may require a 64-bit operating system, however.
+This tutorial should work for almost any Raspberry Pi but you will need the ReSpesaker HAT or the HAT that i linked Audio enhancements and local wake word detection may require a 64-bit operating system, however.
 
 ## Install OS
 
