@@ -250,7 +250,7 @@ Save the file and exit your editor.
 You can now update your satellite service:
 
 ``` sh
-sudo systemctl edit --force --full wyoming-satellite-spiyderz.service
+sudo systemctl edit --force --full wyoming-satellite.service
 ```
 
 Update just the parts below:
@@ -288,7 +288,7 @@ They should all be "active (running)" and green.
 Test out your satellite by saying "ok, nabu" and a voice command. Use `journalctl` to check the logs of services for errors:
 
 ``` sh
-journalctl -u wyoming-openwakeword-spiyderz.service -f
+journalctl -u wyoming-openwakeword.service -f
 ```
 
 Make sure to run `sudo systemctl daemon-reload` every time you make changes to the service.
