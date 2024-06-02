@@ -143,7 +143,7 @@ In the `wyoming-satellite` directory, run:
 ```sh
 script/run \
   --debug \
-  --name 'my satellite "my satellite"' \
+  --name 'my satellite' \
   --uri 'tcp://0.0.0.0:10700' \
   --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' \
   --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw'
@@ -158,7 +158,7 @@ Your satellite should say "Streaming audio", and you can use the wake word of yo
 
 ## Create Services
 
-You can run wyoming-satellite-spiyderz as a systemd service by first creating a service file:
+You can run wyoming-satellite as a systemd service by first creating a service file:
 
 ``` sh
 sudo systemctl edit --force --full wyoming-satellite.service
@@ -175,8 +175,8 @@ Requires=wyoming-openwakeword
 
 [Service]
 Type=simple
-ExecStart=/home/pi/wyoming-satellite-spiyderz/script/run --name 'my satellite "name here"' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw' --snd-volume-multiplier 1.0 --mic-auto-gain 5 --mic-noise-suppression 1 --done-wav sounds/done.wav --awake-wav sounds/awake.wav
-WorkingDirectory=/home/pi/wyoming-satellite-spiyderz
+ExecStart=/home/pi/wyoming-satellite/script/run --name 'my satellite' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw' --snd-volume-multiplier 1.0 --mic-auto-gain 5 --mic-noise-suppression 1 --done-wav sounds/done.wav --awake-wav sounds/awake.wav
+WorkingDirectory=/home/pi/wyoming-satellite
 Restart=always
 RestartSec=1
 
