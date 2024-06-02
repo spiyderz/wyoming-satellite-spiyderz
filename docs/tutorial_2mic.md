@@ -1,15 +1,16 @@
 # This is a fork of the original git here: 
 
-[](https://github.com/rhasspy/wyoming-satellite/tree/master)
+https://github.com/rhasspy/wyoming-satellite/tree/master
+
 All cdredit goes to the original developer(s). All I did was fork their repo, clean up the 2_mic tutitorial to make it a bit easier, fixed one line of code in the openwakeword repo to fix the install failing and added the command for openwakeword to start at boot that was missing in the original tutitorial so that the system would survive a reboot or coming back from power loss. I also removed the LED portion of the noriginal tut because I couldnt get it to work. 
 
 ## Hardware links for what I have in my setup...
 
 Disclaimer: These are NOT Amazon affiliate links, they are just links for the hardware i used. I purchased on amazon because I didnt want to wait forever for things to come from overseas. I make NO money from these links and give no endorsement other than they worked for me.
 
-Pi Zreo 2 W: [](https://www.amazon.com/dp/B09LTDQY2Z?psc=1) Its more expensive but I wanted one with headers already installed
+Pi Zreo 2 W: https://www.amazon.com/dp/B09LTDQY2Z?psc=1 Its more expensive but I wanted one with headers already installed
 
-2 Mic HAT: [](https://www.amazon.com/dp/B098R7TTM4?psc=1) This is a knock off respeaker HAT but it works great and comes with some pretty terrific speakers
+2 Mic HAT: https://www.amazon.com/dp/B098R7TTM4?psc=1 This is a knock off respeaker HAT but it works great and comes with some pretty terrific speakers
 
 I can comfirm this works with a Pi4 (and probably a Pi3?) if you have one lying around.
 
