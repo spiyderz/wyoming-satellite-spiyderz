@@ -81,17 +81,11 @@ If the installation was successful, you should be able to run help and see the h
 script/run --help
 ```
 
-## Determine Audio Devices
+## Test Audio Devices
 
 Picking the correct microphone/speaker devices is critical for the satellite to work. We'll do a test recording and playback in this section.
 
-List your available microphones with:
-
-```sh
-arecord -L
-```
-
-Record a 5 second sample from your chosen microphone:
+Record a 5 second sample from your microphone:
 
 ```sh
 arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t wav -d 5 test.wav
@@ -108,7 +102,7 @@ aplay -D plughw:CARD=seeed2micvoicec,DEV=0 test.wav
 You should hear your recorded sample.
 
 
-## Create Services
+## Create The Services
 
 You can run wyoming-satellite as a systemd service by first creating a service file:
 
@@ -116,7 +110,7 @@ You can run wyoming-satellite as a systemd service by first creating a service f
 sudo systemctl edit --force --full wyoming-satellite.service
 ```
 
-Paste in the following template, and change both `/home/pi` and the `script/run` arguments to match your set up:
+Paste in the following template:
 
 ```text
 [Unit]
@@ -127,7 +121,7 @@ Requires=wyoming-openwakeword
 
 [Service]
 Type=simple
-ExecStart=/home/pi/wyoming-satellite/script/run --name 'my satellite' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw' --snd-volume-multiplier 1.0 --mic-auto-gain 5 --mic-noise-suppression 1 --done-wav sounds/done.wav --awake-wav sounds/awake.wav
+ExecStart=/home/pi/wyoming-satellite/script/run --name 'my satellite' --uri 'tcp://0.0.0.0:10700' --mic-command 'arecord -D plughw:CARD=seeed2micvoicec,DEV=0 -r 16000 -c 1 -f S16_LE -t raw' --snd-command 'aplay -D plughw:CARD=seeed2micvoicec,DEV=0 -r 22050 -c 1 -f S16_LE -t raw' --snd-volume-multiplier 1.0 --mic-auto-gain 5 --mic-noise-suppression 2 --done-wav sounds/done.wav --awake-wav sounds/awake.wav
 WorkingDirectory=/home/pi/wyoming-satellite
 Restart=always
 RestartSec=1
@@ -163,7 +157,7 @@ Create a systemd service for it:
 sudo systemctl edit --force --full wyoming-openwakeword.service
 ```
 
-Paste in the following template, and change both `/home/pi` and the `script/run` arguments to match your set up:
+Paste in the following template:
 
 ```text
 [Unit]
@@ -189,7 +183,7 @@ sudo systemctl enable --now wyoming-openwakeword.service
 sudo systemctl enable --now wyoming-satellite.service
 ```
 
-You should see the wake service get automatically loaded:
+You should see the wake service get automatically loaded by running:
 
 ``` sh
 sudo systemctl status wyoming-satellite.service wyoming-openwakeword.service
@@ -200,7 +194,7 @@ They should all be "active (running)" and green.
 Go to your home assistant page and you should see the discovered wyoming satellite. Add it.
 
 
-Test out your satellite by saying "ok, nabu" and a voice command. Use `journalctl` to check the logs of services for errors:
+Test out your satellite by saying "ok, nabu" and a voice command (dont forget to expose your entites to assist. Use `journalctl` to check the logs of services for errors:
 
 ``` sh
 journalctl -u wyoming-openwakeword.service -f
