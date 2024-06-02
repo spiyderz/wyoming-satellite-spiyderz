@@ -28,7 +28,7 @@ sudo apt-get install --no-install-recommends  \
 Clone the `wyoming-satellite` repository:
 
 ```sh
-git clone https://github.com/rhasspy/wyoming-satellite.git
+git clone https://github.com/spiyderz/wyoming-satellite.git
 ```
 
 Now you can run the installer:
