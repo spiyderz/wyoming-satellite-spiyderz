@@ -76,7 +76,7 @@ python3 -m venv .venv
   -r requirements_vad.txt
 ```
 
-If the installation was successful, you should be able to run help and get ba help list:
+If the installation was successful, you should be able to run help and see the help list:
 ```sh
 script/run --help
 ```
