@@ -351,7 +351,7 @@ def configure_openWakeWord(settings: Settings) -> None:
         elif choice == "threshold":
             while True:
                 threshold = inputbox(
-                    "Threshold (0-1, 0.5 = default):",
+                    "Threshold (0-1, 0.9 = default):",
                     settings.wake.openwakeword.threshold,
                 )
                 if threshold is None:
