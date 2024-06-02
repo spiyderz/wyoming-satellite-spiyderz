@@ -218,7 +218,7 @@ From your home directory, install the openWakeWord Wyoming service:
 
 ```sh
 git clone https://github.com/spiyderz/wyoming-openwakeword.git
-cd wyoming-openwakeword-spiyderz
+cd wyoming-openwakeword
 script/setup
 ```
 
